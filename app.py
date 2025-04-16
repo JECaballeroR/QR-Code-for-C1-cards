@@ -50,11 +50,11 @@ if generate and url:
 
     for x, y in eye_positions:
         draw.rectangle([x, y, x + eye_px, y + eye_px], fill="white")
-        draw.rounded_rectangle([x, y, x + eye_px, y + eye_px], radius=30, fill="#000000")
+        draw.rounded_rectangle([x, y, x + eye_px, y + eye_px], radius=20, fill="#000000")
         inner_padding = module_px
         draw.rounded_rectangle(
             [x + inner_padding, y + inner_padding, x + eye_px - inner_padding, y + eye_px - inner_padding],
-            radius=25,
+            radius=15,
             fill="white"
         )
         dot_center_x = x + eye_px // 2
