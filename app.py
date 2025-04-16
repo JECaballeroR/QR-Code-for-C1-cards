@@ -54,7 +54,7 @@ if generate and url:
         inner_padding = module_px
         draw.rounded_rectangle(
             [x + inner_padding, y + inner_padding, x + eye_px - inner_padding, y + eye_px - inner_padding],
-            radius=10,
+            radius=25,
             fill="white"
         )
         dot_center_x = x + eye_px // 2
