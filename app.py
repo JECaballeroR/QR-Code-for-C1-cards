@@ -6,18 +6,18 @@ from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
 from io import BytesIO
 
 # App title
-st.title("Generador de QR con Logo y Ojos Redondeados")
-st.markdown("Ingresa una URL (por ejemplo, un `.vcf`) y genera un código QR personalizado.")
+st.title("QR Code Generator with Logo and Rounded Eyes")
+st.markdown("Enter a full URL (e.g., a `.vcf` file), and generate a custom QR code with a logo.")
 
 # Input
-url = st.text_input("URL del archivo o página", value="https://www.correlation-one.com/hubfs/EstebanCaballero.vcf")
-generate = st.button("Generar QR")
+url = st.text_input("URL to link to", value="https://www.correlation-one.com/hubfs/EstebanCaballero.vcf")
+generate = st.button("Generate QR Code")
 
 if generate and url:
     name = "GeneratedQR"
     logo_path = "C1 Short Logo Dark@2x.png"
 
-    # Crear QR
+    # Create the QR Code object
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_H,
@@ -27,6 +27,7 @@ if generate and url:
     qr.add_data(url)
     qr.make(fit=True)
 
+    # Generate QR image with rounded modules
     qr_img_rgb = qr.make_image(
         image_factory=StyledPilImage,
         module_drawer=RoundedModuleDrawer(),
@@ -34,7 +35,7 @@ if generate and url:
         back_color="white"
     ).convert("RGB")
 
-    # Dibujar ojos
+    # Draw custom rounded eyes
     draw = ImageDraw.Draw(qr_img_rgb)
     module_px = qr.box_size
     eye_size_modules = 7
@@ -43,9 +44,9 @@ if generate and url:
     dot_radius = dot_size // 2
 
     eye_positions = [
-        (qr.border * module_px, qr.border * module_px),
-        (qr_img_rgb.size[0] - qr.border * module_px - eye_px, qr.border * module_px),
-        (qr.border * module_px, qr_img_rgb.size[1] - qr.border * module_px - eye_px),
+        (qr.border * module_px, qr.border * module_px),  # Top-left
+        (qr_img_rgb.size[0] - qr.border * module_px - eye_px, qr.border * module_px),  # Top-right
+        (qr.border * module_px, qr_img_rgb.size[1] - qr.border * module_px - eye_px),  # Bottom-left
     ]
 
     for x, y in eye_positions:
@@ -67,7 +68,7 @@ if generate and url:
             fill="#000000"
         )
 
-    # Logo centrado
+    # Center and paste the logo
     logo = Image.open(logo_path)
     qr_width = qr_img_rgb.size[0]
     aspect_ratio = logo.width / logo.height
@@ -82,16 +83,16 @@ if generate and url:
     pos = ((qr_width - logo_bg.width) // 2, (qr_width - logo_bg.height) // 2)
     qr_img_rgb.paste(logo_bg, pos)
 
-    # Mostrar imagen en Streamlit
-    st.image(qr_img_rgb, caption="QR generado", use_container_width =False)
+    # Display QR code image
+    st.image(qr_img_rgb, caption="Generated QR Code", use_container_width=False)
 
-    # Preparar descarga
+    # Prepare image for download
     buf = BytesIO()
     qr_img_rgb.save(buf, format="PNG")
     byte_im = buf.getvalue()
 
     st.download_button(
-        label="📥 Descargar QR como PNG",
+        label="📥 Download QR as PNG",
         data=byte_im,
         file_name=f"{name}.png",
         mime="image/png"
