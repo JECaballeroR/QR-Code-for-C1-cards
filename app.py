@@ -76,7 +76,7 @@ if generate and url:
     target_width = int(target_height * aspect_ratio)
     logo = logo.resize((target_width, target_height), Image.LANCZOS)
 
-    padding = 12
+    padding = 13
     logo_bg = Image.new("RGB", (target_width + 2 * padding, target_height + 2 * padding), "white")
     logo_bg.paste(logo, (padding, padding), mask=logo if logo.mode == 'RGBA' else None)
 
